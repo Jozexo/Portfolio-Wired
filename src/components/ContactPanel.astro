@@ -1,0 +1,47 @@
+---
+type Social = { name: string; href: string };
+interface Props {
+  email?: string;
+  pgp?: string;
+  socials?: Social[];
+}
+const {
+  email = "me@example.com",
+  pgp = "FINGERPRINT-0000-0000-0000-0000-0000",
+  socials = [
+    { name: "GitHub", href: "https://github.com/your" },
+    { name: "LinkedIn", href: "#" },
+    { name: "X", href: "#" },
+  ] as Social[],
+} = Astro.props as Props;
+---
+<section id="contact" class="section">
+  <div class="panel overflow-hidden">
+    <div class="panel-chrome">
+      <span class="dot red"></span>
+      <span class="dot yellow"></span>
+      <span class="dot green"></span>
+      <span class="ml-2 text-[var(--muted)] text-xs">/dev/contact</span>
+    </div>
+    <div class="p-5 md:p-7 grid md:grid-cols-2 gap-6">
+      <div>
+        <h3 class="font-semibold mb-2">canales</h3>
+        <ul class="space-y-2 text-sm">
+          <li><span class="text-[var(--accent-phosphor)]">$</span> mailto: <a href={`mailto:${email}`}>{email}</a></li>
+          <li><span class="text-[var(--accent-phosphor)]">$</span> pgp: <code>{pgp}</code></li>
+          {socials.map((s: Social) => (
+            <li><span class="text-[var(--accent-phosphor)]">$</span> <a href={s.href} target="_blank" rel="noreferrer">{s.name}</a></li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <h3 class="font-semibold mb-2">mensaje rápido</h3>
+        <form class="grid gap-3 text-sm" onsubmit="event.preventDefault(); window.location.href=`mailto:${email}?subject=${encodeURIComponent('Contacto desde wired')}`;">
+          <input class="bg-transparent border border-[var(--grid)] rounded px-3 py-2 outline-none focus:border-[var(--accent-pink)]" placeholder="tu correo" />
+          <textarea rows="4" class="bg-transparent border border-[var(--grid)] rounded px-3 py-2 outline-none focus:border-[var(--accent-pink)]" placeholder="mensaje"></textarea>
+          <button class="justify-self-start px-4 py-2 rounded border border-[var(--grid)] hover:border-[var(--accent-pink)] text-[var(--fg)]">enviar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
