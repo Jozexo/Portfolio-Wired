@@ -1,13 +1,18 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import Hero from "../components/Hero.astro";
 import TerminalCard from "../components/TerminalCard.astro";
 import ProjectMesh from "../components/ProjectMesh.astro";
 import ContactPanel from "../components/ContactPanel.astro";
 
-const title = "wired :: joseg";
+const title = "Wired :: JH";
 ---
 
 <Layout {title}>
+  <Hero 
+    name="José Hernández"
+    subtitle="Systems Engineer | Cybersecurity (Pentesting) & Ethical Hacking | Infrastructure & Networks | Dev. Full-Stack"
+  />
   <TerminalCard />
   <ProjectMesh />
   <ContactPanel />
