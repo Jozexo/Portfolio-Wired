@@ -5,6 +5,7 @@ export type Project = {
   tags: string[];
   href: string;
   repo?: string;
+  image?: string;
 };
 
 export const projects: Project[] = [
@@ -44,5 +45,6 @@ export const projects: Project[] = [
     description: "Este portafolio: Astro + estética Lain + terminal.",
     tags: ["astro", "design", "css"],
     href: "/",
+    image: "/img/lain-glich.gif",
   },
 ];
