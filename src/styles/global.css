@@ -48,6 +48,7 @@ h1, h2, h3 { font-family: var(--display); letter-spacing: .5px; }
 /* Layout helpers */
 .container-wired { width: min(1150px, 100% - 2rem); margin-inline: auto; }
 .section { padding-block: clamp(48px, 6vw, 96px); }
+.section--compact { padding-block: clamp(24px, 4vw, 56px); }
 
 /* CRT scanlines effect (used by overlay component) */
 .scanlines::before {
@@ -159,12 +160,20 @@ h1, h2, h3 { font-family: var(--display); letter-spacing: .5px; }
 	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
 	gap: 16px;
 }
+.mesh--compact {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+	gap: 12px;
+}
 .node {
 	background: linear-gradient(180deg, rgba(126,231,135,0.06) 0%, rgba(210,115,137,0.06) 100%);
 	border: 1px solid var(--grid);
 	border-radius: 10px;
 	padding: 14px 14px 12px;
 	transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+.node--compact {
+	padding: 10px 10px 9px;
 }
 .node:hover {
 	transform: translateY(-2px);
