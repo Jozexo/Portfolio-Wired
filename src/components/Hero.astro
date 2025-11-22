@@ -1,37 +1,47 @@
 ---
 const {
   name = "José Hernández",
-  subtitle = "Systems Engineer | Cybersecurity (Pentesting) & Ethical Hacking | Infrastructure & Networks | Dev. Full-Stack",
+  subtitle = "Ingeniero de Sistemas | Ciberseguridad (Penetración) y Hacking Ético | Infraestructura y Redes | Desarrollador Full-Stack",
 } = Astro.props as { name?: string; subtitle?: string };
+import "../styles/components/hero.css";
 ---
 <section class="section section--compact">
-  <div class="flex flex-col md:flex-row items-start md:items-center gap-15">
+  <div class="flex flex-col md:flex-row items-start md:items-center gap-8">
     <div>
-      <h1 class="whitespace-nowrap text-4xl md:text-6xl font-semibold mb-2" style="color:#d27389">{name}</h1>
-      <p class="text-[var(--muted)] max-w-3xl">
+      <h1 class="text-4xl md:text-5xl font-semibold mb-1 flex items-center gap-3 flex-wrap" style="color:#d27389">
+        <span class="hero-name glitch glitch-anim" data-text={name}>{name}</span>
+        <span class="term-badge" data-term-typing>
+          <span class="term-dollar">$</span>
+          <span class="term-cmd"></span>
+          <span class="term-cursor" aria-hidden="true"></span>
+        </span>
+      </h1>
+      <p class="text-(--muted) max-w-3xl">
         {subtitle}
       </p>
       <a
         href="#contact"
         aria-label="Ir a contacto"
-        class="inline-flex items-center gap-2 mt-4 px-4 py-2 rounded border border-[var(--grid)] text-[var(--fg)] hover:border-[var(--accent-pink)] transition-colors shadow-sm hover:shadow-[0_0_18px_rgba(210,115,137,.35)]"
+        class="inline-flex items-center gap-2 mt-4 px-4 py-2 rounded border border-(--grid) text-(--fg) hover:border-(--accent-pink) transition-colors shadow-sm hover:shadow-[0_0_18px_rgba(210,115,137,.35)]"
       >
-        Contactame!!!
+        Contactame
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <path d="M7 17L17 7"/>
           <path d="M7 7h10v10"/>
         </svg>
       </a>
     </div>
-      <figure class="silhouette-hover translate-y-2" style="--silhouette-mask: url(/img/lain-glich.gif);">
+      <figure class="silhouette-hover translate-y-1" style="--silhouette-mask: url(/img/lain-glich.gif);">
       <img
         src="/img/lain-glich.gif"
         alt="Lain style ambient glitch"
         loading="lazy"
-        class="w-[300px] md:w-[322px] aspect-square object-cover transition-shadow"
+        class="w-[220px] md:w-60 aspect-square object-cover transition-shadow"
       />
-      <figcaption class="absolute -bottom-2 left-2 text-[10px] tracking-wide uppercase text-[var(--muted)] opacity-70 select-none">
+      <figcaption class="absolute -bottom-2 left-2 text-[10px] tracking-wide uppercase text-(--muted) opacity-70 select-none">
       </figcaption>
     </figure>
   </div>
 </section>
+
+<script type="module" src="/src/scripts/term-badge.ts"></script>
