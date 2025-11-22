@@ -17,4 +17,20 @@ export const projects: Project[] = [
     href: "/",
     image: "/img/lain-glich.gif",
   },
+  {
+    title: "anomaly-viewer",
+    slug: "anomaly-viewer",
+    description: "Visualizador experimental de datos con efectos glitch y filtros fractales.",
+    tags: ["three.js", "webgl", "ux"],
+    href: "#", // pendiente de URL final
+    image: "/img/placeholder-anomaly.jpg",
+  },
+  {
+    title: "anomaly-viewer",
+    slug: "anomaly-viewer",
+    description: "Visualizador experimental de datos con efectos glitch y filtros fractales.",
+    tags: ["three.js", "webgl", "ux"],
+    href: "#", // pendiente de URL final
+    image: "/img/placeholder-anomaly.jpg",
+  },
 ];

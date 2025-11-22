@@ -1,2 +1,9 @@
 /* Layout específico del contenedor de proyectos */
 .mesh--stack { grid-template-columns: 1fr; gap: 18px; }
+
+/* Nueva rejilla 2 columnas (responsive) */
+.mesh--grid2 { display:grid; grid-template-columns: repeat(auto-fill,minmax(300px,1fr)); gap:22px; align-items:stretch; }
+
+@media (max-width: 680px) {
+	.mesh--grid2 { grid-template-columns: 1fr; gap:20px; }
+}
