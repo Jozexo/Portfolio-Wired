@@ -58,3 +58,16 @@
 @media (hover: none) {
   .contact-cta:hover { transform: none; box-shadow: 0 4px 16px rgba(210,115,137,0.12); }
 }
+
+/* Reveal on scroll for hero */
+#identity .reveal-hero {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity .55s ease, transform .55s cubic-bezier(.22,.61,.36,1);
+  transition-delay: calc(var(--d, 0) * 100ms);
+}
+#identity .reveal-hero.is-visible { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  #identity .reveal-hero { opacity: 1; transform: none; transition: none; }
+}

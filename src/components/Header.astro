@@ -4,21 +4,21 @@ import SocialIcon from './icons/SocialIcon.astro';
 ---
 <header class="sticky top-0 z-40 border-b border-[var(--grid)] bg-[color-mix(in_oklab,var(--bg)_70%,black)]/70 header-blur">
 	<div class="container-wired flex items-center justify-between py-3">
-		<div class="text-sm md:text-base text-[var(--muted)] select-none">
+		<div class="text-sm md:text-base text-[var(--muted)] select-none reveal" style="--d:0">
 			<span class="text-[var(--accent-phosphor)]">0xla1n</span>@<span class="text-[var(--accent-pink)]">wired</span>:<span class="text-[var(--accent-pink)]">~</span>$
 			<span class="cursor" aria-hidden="true"></span>
 		</div>
 		<div class="flex items-center gap-5">
 			<nav class="flex items-center gap-4 text-sm">
-				<a href="#identity" class="hover:underline">#identidad</a>
-				<a href="#projects" class="hover:underline">#proyectos</a>
-				<a href="#skills" class="hover:underline">#habilidades</a>
-				<a href="#contact" class="hover:underline">#contacto</a>
+				<a href="#identity" class="hover:underline reveal" style="--d:1">#identidad</a>
+				<a href="#projects" class="hover:underline reveal" style="--d:2">#proyectos</a>
+				<a href="#skills" class="hover:underline reveal" style="--d:3">#habilidades</a>
+				<a href="#contact" class="hover:underline reveal" style="--d:4">#contacto</a>
 			</nav>
 			<div class="h-5 w-px bg-[var(--grid)]/80"></div>
 			<div class="flex items-center gap-3 text-[var(--muted)]">
-				{socials.map(s => (
-					<a aria-label={s.name} href={s.href} target="_blank" rel="noreferrer" class="hover:text-[var(--accent-pink)] transition-colors" title={s.name}>
+				{socials.map((s, i) => (
+					<a aria-label={s.name} href={s.href} target="_blank" rel="noreferrer" class="hover:text-[var(--accent-pink)] transition-colors reveal" style={`--d:${i+5}`} title={s.name}>
 						<SocialIcon name={s.name} />
 					</a>
 				))}
@@ -26,4 +26,21 @@ import SocialIcon from './icons/SocialIcon.astro';
 		</div>
 	</div>
 </header>
+<style>
+  header .reveal { opacity:0; transform: translateY(-6px); transition: opacity .45s ease, transform .45s ease; transition-delay: calc(var(--d,0)*70ms); }
+  header .reveal.is-visible { opacity:1; transform:none; }
+  @media (prefers-reduced-motion: reduce) { header .reveal { opacity:1; transform:none; transition:none; } }
+</style>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const h = document.querySelector('header');
+    if (!h) return;
+    const items = h.querySelectorAll('.reveal');
+    if (!('IntersectionObserver' in window)) { items.forEach(el => el.classList.add('is-visible')); return; }
+    const io = new IntersectionObserver((entries, obs) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('is-visible'); obs.unobserve(e.target); } });
+    }, { threshold: 0 });
+    items.forEach(el => io.observe(el));
+  });
+</script>
 
