@@ -1,19 +1,9 @@
 ---
-type Social = { name: string; href: string };
-interface Props {
-  email?: string;
-  pgp?: string;
-  socials?: Social[];
-}
-const {
-  email = "me@example.com",
-  pgp = "FINGERPRINT-0000-0000-0000-0000-0000",
-  socials = [
-    { name: "GitHub", href: "https://github.com/your" },
-    { name: "LinkedIn", href: "#" },
-    { name: "X", href: "#" },
-  ] as Social[],
-} = Astro.props as Props;
+import { socials as defaultSocials, type Social } from '../data/socials';
+import SocialIcon from './icons/SocialIcon.astro';
+interface Props { email?: string; socials?: Social[] }
+const { email = "jozehernandez@proton.me", socials: socialsProp } = Astro.props as Props;
+const socials = socialsProp ?? defaultSocials;
 ---
 <section id="contact" class="section">
   <h2 class="text-lg md:text-xl lg:text-2xl font-bold text-(--muted) mb-3">
@@ -31,18 +21,78 @@ const {
         <h3 class="font-semibold mb-2">canales</h3>
         <ul class="space-y-2 text-sm">
           <li><span class="text-(--accent-phosphor)">$</span> mailto: <a href={`mailto:${email}`}>{email}</a></li>
-          <li><span class="text-(--accent-phosphor)">$</span> pgp: <code>{pgp}</code></li>
+          <li><span class="text-(--accent-phosphor)">$</span> phone: <a href={`tel:+584121919735`}>+58 412-1919735</a></li>
           {socials.map((s: Social) => (
-            <li><span class="text-(--accent-phosphor)">$</span> <a href={s.href} target="_blank" rel="noreferrer">{s.name}</a></li>
+            <li class="flex items-center gap-2"><span class="text-(--accent-phosphor)">$</span> <a href={s.href} target="_blank" rel="noreferrer" class="inline-flex items-center gap-1"><SocialIcon name={s.name} size={16} /> {s.name}</a></li>
           ))}
         </ul>
       </div>
       <div>
         <h3 class="font-semibold mb-2">mensaje rápido</h3>
-        <form class="grid gap-3 text-sm" onsubmit="event.preventDefault(); window.location.href=`mailto:${email}?subject=${encodeURIComponent('Contacto desde wired')}`;">
-          <input class="bg-transparent border border-(--grid) rounded px-3 py-2 outline-none focus:border-(--accent-pink)" placeholder="tu correo" />
-          <textarea rows="4" class="bg-transparent border border-(--grid) rounded px-3 py-2 outline-none focus:border-(--accent-pink)" placeholder="mensaje"></textarea>
-          <button class="justify-self-start px-4 py-2 rounded border border-(--grid) hover:border-(--accent-pink) text-(--fg)">enviar</button>
+        <form id="quick-msg" class="grid gap-3 text-sm">
+          <div class="flex gap-2 items-start">
+            <input
+              type="email"
+              name="from"
+              id="fromEmail"
+              inputmode="email"
+              autocomplete="email"
+              required
+              maxlength="254"
+              pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
+              class="flex-1 bg-transparent border border-(--grid) rounded px-3 py-2 outline-none focus:border-(--accent-pink)"
+              placeholder="tu correo" />
+            <button type="submit" class="px-4 py-2 rounded border border-(--grid) hover:border-(--accent-pink) text-(--fg)">enviar</button>
+          </div>
+          <div class="space-y-1">
+            <textarea
+              id="mensaje"
+              rows="4"
+              maxlength="800"
+              style="resize:none;"
+              class="w-full bg-transparent border border-(--grid) rounded px-3 py-2 outline-none focus:border-(--accent-pink)"
+              placeholder="mensaje"></textarea>
+            <div class="flex justify-between text-xs text-(--muted)">
+              <span>Máximo 800 caracteres.</span>
+              <span><span id="msg-count">0</span>/800</span>
+            </div>
+            <div id="msg-status" class="text-xs"></div>
+          </div>
+          <script>
+            document.addEventListener('DOMContentLoaded', () => {
+              const ta = document.getElementById('mensaje') as HTMLTextAreaElement | null;
+              const count = document.getElementById('msg-count') as HTMLElement | null;
+              const form = document.getElementById('quick-msg') as HTMLFormElement | null;
+              const status = document.getElementById('msg-status') as HTMLElement | null;
+              const fromEmail = document.getElementById('fromEmail') as HTMLInputElement | null;
+              if (ta && count) {
+                const update = () => { count.textContent = ta.value.length.toString(); };
+                ta.addEventListener('input', update);
+                update();
+              }
+              if (form && ta && status) {
+                form.addEventListener('submit', (e) => {
+                  e.preventDefault();
+                  if (!fromEmail?.reportValidity()) return;
+                  if (!ta || ta.value.length === 0) {
+                    status.textContent = 'El mensaje no puede estar vacío.';
+                    status.style.color = 'var(--accent-pink)';
+                    return;
+                  }
+                  const subject = encodeURIComponent('Contacto desde wired');
+                  const body = encodeURIComponent(`De: ${fromEmail.value}\n\n${ta.value}`);
+                  const mailtoUrl = `mailto:${"jozehernandez@proton.me"}?subject=${subject}&body=${body}`;
+                  status.textContent = 'Abriendo tu cliente de correo…';
+                  status.style.color = 'var(--accent-phosphor)';
+                  setTimeout(() => { window.location.href = mailtoUrl; }, 100);
+                  setTimeout(() => {
+                    status.textContent = 'Si el cliente se abrió, revisa y envía el correo. ✅';
+                    status.style.color = 'var(--accent-pink)';
+                  }, 1200);
+                });
+              }
+            });
+          </script>
         </form>
       </div>
     </div>
