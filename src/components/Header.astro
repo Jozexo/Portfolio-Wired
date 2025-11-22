@@ -4,43 +4,160 @@ import SocialIcon from './icons/SocialIcon.astro';
 ---
 <header class="sticky top-0 z-40 border-b border-[var(--grid)] bg-[color-mix(in_oklab,var(--bg)_70%,black)]/70 header-blur">
 	<div class="container-wired flex items-center justify-between py-3">
-		<div class="text-sm md:text-base text-[var(--muted)] select-none reveal" style="--d:0">
+		<div class="text-sm md:text-base text-(--muted) select-none reveal" style="--d:0">
 			<span class="text-[var(--accent-phosphor)]">0xla1n</span>@<span class="text-[var(--accent-pink)]">wired</span>:<span class="text-[var(--accent-pink)]">~</span>$
 			<span class="cursor" aria-hidden="true"></span>
 		</div>
-		<div class="flex items-center gap-5">
+		<!-- Desktop nav -->
+		<div class="hidden md:flex items-center gap-5">
 			<nav class="flex items-center gap-4 text-sm">
 				<a href="#identity" class="hover:underline reveal" style="--d:1">#identidad</a>
 				<a href="#projects" class="hover:underline reveal" style="--d:2">#proyectos</a>
 				<a href="#skills" class="hover:underline reveal" style="--d:3">#habilidades</a>
 				<a href="#contact" class="hover:underline reveal" style="--d:4">#contacto</a>
 			</nav>
-			<div class="h-5 w-px bg-[var(--grid)]/80"></div>
-			<div class="flex items-center gap-3 text-[var(--muted)]">
+			<div class="h-5 w-px bg-(--grid)/80"></div>
+			<div class="flex items-center gap-3 text-(--muted)">
 				{socials.map((s, i) => (
-					<a aria-label={s.name} href={s.href} target="_blank" rel="noreferrer" class="hover:text-[var(--accent-pink)] transition-colors reveal" style={`--d:${i+5}`} title={s.name}>
+					  <a aria-label={s.name} href={s.href} target="_blank" rel="noreferrer" class="hover:text-(--accent-pink) transition-colors reveal" style={`--d:${i+5}`} title={s.name}>
 						<SocialIcon name={s.name} />
 					</a>
 				))}
 			</div>
 		</div>
+		<!-- Mobile nav -->
+		<div class="md:hidden flex items-center">
+			<button id="menu-toggle" aria-label="Abrir menú" class="hamburger-btn p-2 rounded focus:outline-none focus:ring-2 focus:ring-(--accent-pink)">
+				<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+					<line x1="4" y1="7" x2="20" y2="7" />
+					<line x1="4" y1="12" x2="20" y2="12" />
+					<line x1="4" y1="17" x2="20" y2="17" />
+				</svg>
+			</button>
+			<!-- Close button placed in same spot as toggle; will be shown when menu is open -->
+			<button id="menu-close" aria-label="Cerrar menú" class="close-btn p-2 rounded focus:outline-none focus:ring-2 focus:ring-(--accent-pink)">
+				<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+					<line x1="6" y1="6" x2="18" y2="18" />
+					<line x1="6" y1="18" x2="18" y2="6" />
+				</svg>
+			</button>
+			<div id="mobile-menu" class="fixed top-0 left-0 w-full h-full bg-[color-mix(in_oklab,var(--bg)_90%,black)]/95 z-50 flex flex-col items-center justify-center gap-8 text-lg text-(--muted) transition-all duration-300 opacity-0 pointer-events-none">
+				<nav class="flex flex-col items-center gap-6 mt-8">
+					<a href="#identity" class="mobile-link">#identidad</a>
+					<a href="#projects" class="mobile-link">#proyectos</a>
+					<a href="#skills" class="mobile-link">#habilidades</a>
+					<a href="#contact" class="mobile-link">#contacto</a>
+				</nav>
+				<div class="flex items-center gap-5 mt-8">
+					{socials.map((s, i) => (
+						<a aria-label={s.name} href={s.href} target="_blank" rel="noreferrer" class="hover:text-(--accent-pink) transition-colors" title={s.name}>
+							<SocialIcon name={s.name} />
+						</a>
+					))}
+				</div>
+			</div>
+		</div>
 	</div>
 </header>
 <style>
-  header .reveal { opacity:0; transform: translateY(-6px); transition: opacity .45s ease, transform .45s ease; transition-delay: calc(var(--d,0)*70ms); }
-  header .reveal.is-visible { opacity:1; transform:none; }
-  @media (prefers-reduced-motion: reduce) { header .reveal { opacity:1; transform:none; transition:none; } }
+	header .reveal { opacity:0; transform: translateY(-6px); transition: opacity .45s ease, transform .45s ease; transition-delay: calc(var(--d,0)*70ms); }
+	header .reveal.is-visible { opacity:1; transform:none; }
+	@media (prefers-reduced-motion: reduce) { header .reveal { opacity:1; transform:none; transition:none; } }
+
+	.hamburger-btn svg { color: var(--accent-pink); }
+	/* Mobile menu should open below the header to avoid appearing 'very high' */
+	#mobile-menu {
+		opacity: 0;
+		pointer-events: none;
+		/* place below header; header height default 64px */
+		top: var(--header-height, 64px);
+		left: 0;
+		width: 100%;
+		height: calc(100vh - var(--header-height, 64px));
+		position: fixed;
+		transform: translateY(-6px);
+		transition: opacity .25s ease, transform .25s ease;
+		z-index: 50;
+	}
+	#mobile-menu.open {
+		opacity: 1;
+		pointer-events: auto;
+		transform: none;
+	}
+
+	/* Show/hide toggle and close button in the same place using `menu-open` class on the header */
+	header #menu-toggle { display: inline-flex; }
+	header .close-btn { display: none; }
+	header.menu-open #menu-toggle { display: none; }
+	header.menu-open .close-btn { display: inline-flex; }
+
+	/* Normalize size and alignment for toggle/close so header doesn't shift */
+	.hamburger-btn, .close-btn { width: 40px; height: 40px; display: inline-flex; align-items: center; justify-content: center; }
+	#mobile-menu .mobile-link {
+		color: var(--accent-pink);
+		font-weight: 500;
+		font-size: 1.15em;
+		text-decoration: none;
+		transition: color .2s;
+	}
+	#mobile-menu .mobile-link:hover {
+		color: var(--accent-phosphor);
+		text-decoration: underline;
+	}
+
+/* Forzar mismo fondo que desktop en móviles (mantener header-blur) */
+@media (max-width: 767px) {
+	header.sticky {
+ 		background: color-mix(in oklab, var(--bg) 70%, black) / 0.7 !important;
+ 		-webkit-backdrop-filter: blur(var(--header-blur, 8px)) !important;
+ 		backdrop-filter: blur(var(--header-blur, 8px)) !important;
+	}
+}
+
+/* Ensure header keeps its background when menu-open (higher specificity) */
+header.menu-open {
+  background: color-mix(in oklab, var(--bg) 70%, black) / 0.7 !important;
+  -webkit-backdrop-filter: blur(var(--header-blur, 8px)) !important;
+  backdrop-filter: blur(var(--header-blur, 8px)) !important;
+}
 </style>
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const h = document.querySelector('header');
-    if (!h) return;
-    const items = h.querySelectorAll('.reveal');
-    if (!('IntersectionObserver' in window)) { items.forEach(el => el.classList.add('is-visible')); return; }
-    const io = new IntersectionObserver((entries, obs) => {
-      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('is-visible'); obs.unobserve(e.target); } });
-    }, { threshold: 0 });
-    items.forEach(el => io.observe(el));
-  });
+	document.addEventListener('DOMContentLoaded', () => {
+		// Reveal animación
+		const h = document.querySelector('header');
+		if (!h) return;
+		const items = h.querySelectorAll('.reveal');
+		if (!('IntersectionObserver' in window)) { items.forEach(el => el.classList.add('is-visible')); return; }
+		const io = new IntersectionObserver((entries, obs) => {
+			entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('is-visible'); obs.unobserve(e.target); } });
+		}, { threshold: 0 });
+		items.forEach(el => io.observe(el));
+
+		// Menú hamburguesa móvil
+		const menuToggle = document.getElementById('menu-toggle');
+		const mobileMenu = document.getElementById('mobile-menu');
+		const menuClose = document.getElementById('menu-close');
+		const mobileLinks = mobileMenu?.querySelectorAll('.mobile-link');
+
+		function openMenu() {
+			mobileMenu?.classList.add('open');
+			document.body.style.overflow = 'hidden';
+			if (h) h.classList.add('menu-open');
+		}
+		function closeMenu() {
+			mobileMenu?.classList.remove('open');
+			document.body.style.overflow = '';
+			if (h) h.classList.remove('menu-open');
+		}
+		menuToggle?.addEventListener('click', openMenu);
+		// menuClose can refer to the button inside or the new one; ensure to attach if exists
+		const headerClose = document.getElementById('menu-close');
+		headerClose?.addEventListener('click', closeMenu);
+		mobileLinks?.forEach(link => link.addEventListener('click', closeMenu));
+		// Cerrar con Escape
+		document.addEventListener('keydown', (e) => {
+			if (e.key === 'Escape') closeMenu();
+		});
+	});
 </script>
 

@@ -192,6 +192,8 @@ h1, h2, h3 { font-family: var(--display); letter-spacing: .5px; }
 /* Silhouette edge hover using drop-shadows derived from alpha */
 .silhouette-hover { position: relative; display: inline-block; }
 .silhouette-hover img { display: block; transition: filter .5s ease, transform .5s ease; }
+/* Make silhouette glow active always (not only on hover) */
+.silhouette-hover img,
 .silhouette-hover:hover img {
 	filter:
 		drop-shadow(0 0 3px #d27389)

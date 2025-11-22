@@ -6,9 +6,9 @@ const {
 import "../styles/components/hero.css";
 ---
 <section id="identity" class="section section--compact">
-  <div class="flex flex-col md:flex-row items-start md:items-center gap-8">
+  <div class="flex flex-col lg:flex-row items-center lg:items-start gap-8 text-center lg:text-left">
     <div>
-      <h1 class="text-4xl md:text-5xl font-semibold mb-1 flex items-center gap-3 flex-wrap reveal-hero" style="--d:0;color:#d27389">
+      <h1 class="text-4xl md:text-5xl font-semibold mb-1 flex flex-col lg:flex-row items-center gap-3 flex-wrap reveal-hero" style="--d:0;color:#d27389">
         <span class="hero-name glitch glitch-anim" data-text={name}>{name}</span>
         <span class="term-badge" data-term-typing>
           <span class="term-cmd"></span>
@@ -21,7 +21,7 @@ import "../styles/components/hero.css";
       <a
         href="#contact"
         aria-label="Ir a contacto"
-        class="node node--compact contact-cta inline-flex items-center gap-3 mt-5 no-underline reveal-hero"
+        class="node node--compact contact-cta inline-flex items-center gap-3 mt-5 no-underline reveal-hero mx-auto lg:mx-0 py-3 px-6 text-base lg:py-2 lg:px-4"
         style="--d:2"
       >
         <span class="contact-cta__label font-semibold tracking-wide">Contactame</span>
@@ -31,12 +31,12 @@ import "../styles/components/hero.css";
         </svg>
       </a>
     </div>
-      <figure class="silhouette-hover translate-y-1 reveal-hero" style="--d:3; --silhouette-mask: url(img/lain-glich.gif);">
+      <figure class="silhouette-hover translate-y-1 reveal-hero mx-auto" style="--d:3; --silhouette-mask: url(img/lain-glich.gif);">
       <img
         src="img/lain-glich.gif"
         alt="Lain style ambient glitch"
         loading="lazy"
-        class="w-[220px] md:w-60 aspect-square object-cover transition-shadow"
+        class="w-52 lg:w-60 aspect-square object-cover transition-shadow"
       />
       <figcaption class="absolute -bottom-2 left-2 text-[10px] tracking-wide uppercase text-(--muted) opacity-70 select-none">
       </figcaption>
@@ -172,3 +172,40 @@ document.addEventListener('DOMContentLoaded', () => {
   if (nameEl) nameObserver.observe(nameEl);
 });
 </script>
+<style>
+  /* Term-badge: reservar ancho estable para evitar 'jumping' */
+  .term-badge { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, 'Roboto Mono', 'Courier New', monospace; display:inline-flex; align-items:center; gap:0.4rem; }
+  .term-cmd { display:inline-block; min-width:18ch; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  @media (min-width: 1024px) {
+    .term-cmd { min-width:28ch; }
+  }
+  .term-cursor { display:inline-block; width:0.45rem; height:1.05em; background:currentColor; border-radius:2px; margin-left:0.25rem; opacity:0.95; animation:tb-blink 1s steps(2,start) infinite; }
+  @keyframes tb-blink { 50% { opacity:0; } }
+
+  /* Mobile adjustments: centrar y permitir que term-cmd ocupe su propio renglón */
+  @media (max-width: 767px) {
+    /* Make the hero fill the viewport so the next card isn't cut */
+    #identity { min-height: calc(100vh - 64px); padding-top: 24px; padding-bottom: 32px; display:flex; align-items:center; }
+    #identity > div { align-items:center; }
+    h1.reveal-hero { text-align:center; }
+    h1.reveal-hero { align-items:center; }
+    h1.reveal-hero .hero-name { display:block; margin-bottom:0.5rem; }
+    h1.reveal-hero .term-cmd { min-width:0; display:block; margin:0.3rem auto 0; }
+    p.reveal-hero { text-align:center; margin-top:0.8rem; margin-bottom:1rem; }
+    .contact-cta { margin:0.9rem auto 0; padding:0.75rem 1.25rem; font-size:1.05rem; }
+    figure.silhouette-hover { margin-top:1.25rem; margin-left:0; margin-right:0; }
+    figure.silhouette-hover img { width:13rem; height:auto; }
+  }
+
+  /* Más separación entre el título (h1) + term-badge y el subtítulo */
+  h1.reveal-hero + p.reveal-hero { margin-top: 1rem; }
+  @media (max-width: 767px) {
+    h1.reveal-hero + p.reveal-hero { margin-top: 1.2rem; }
+  }
+
+  /* Add extra space below the gif to avoid touching TerminalCard */
+  .silhouette-hover { margin-bottom: 2.5rem; }
+  @media (max-width: 767px) {
+    .silhouette-hover { margin-bottom: 4rem; }
+  }
+</style>

@@ -60,3 +60,18 @@ const email = 'jozehernandez@proton.me';
     });
   </script>
 </footer>
+  <style>
+    /* Mobile-specific footer tweaks: keep desktop as-is (grid md:grid-cols-3) */
+    @media (max-width: 767px) {
+      footer { padding-top: 1rem; padding-bottom: 1rem; }
+      footer .container-wired { padding-left: 1rem; padding-right: 1rem; }
+      footer .container-wired { grid-template-columns: 1fr; gap: 1rem; }
+      footer .order-2 { order: 1; }
+      footer .order-1 { order: 2; }
+      footer .order-3 { order: 3; }
+      footer .space-y-3 { gap: .6rem; }
+      footer .text-xs { font-size: 12px; }
+      /* reduce footer's visual height so our contact min-height calculation is closer */
+      :root { --footer-height-mobile: 140px; }
+    }
+  </style>

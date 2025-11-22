@@ -125,3 +125,22 @@ const socials = socialsProp ?? defaultSocials;
     items.forEach(el => io.observe(el));
   });
 </script>
+<style>
+  /* Ensure contact section reaches down to (above) the footer with a small margin */
+  @media (min-width: 0px) {
+    #contact { /* default: try to fill viewport minus header and footer */
+      min-height: calc(100vh - var(--header-height, 64px) - 160px - 24px);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      padding-bottom: 24px;
+    }
+    /* Make the inner panel expand if content is small */
+    #contact .panel { flex: 1 1 auto; display: flex; flex-direction: column; }
+    #contact .panel-chrome + .p-5 { flex: 1 1 auto; }
+  }
+
+  @media (max-width: 767px) {
+    #contact { min-height: calc(100vh - var(--header-height,64px) - 140px - 20px); }
+  }
+</style>
