@@ -1,0 +1,10 @@
+/* Estilos para la tarjeta individual de proyecto */
+.project-card { display: grid; grid-template-columns: 160px 1fr; gap: 14px; padding: 14px; }
+.project-card__media { border-radius: 8px; overflow: hidden; border: 1px solid var(--grid); background: color-mix(in oklab, var(--card) 86%, black); align-self: start; }
+.project-card__media img { display: block; width: 100%; height: 100%; object-fit: cover; aspect-ratio: 16/10; }
+.project-card__placeholder { height: 100%; min-height: 110px; display:flex; align-items:center; justify-content:center; color: var(--muted); }
+.project-card__body { min-width: 0; }
+@media (max-width: 720px) {
+  .project-card { grid-template-columns: 1fr; }
+  .project-card__media { order: -1; }
+}

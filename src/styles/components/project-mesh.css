@@ -1,0 +1,2 @@
+/* Layout específico del contenedor de proyectos */
+.mesh--stack { grid-template-columns: 1fr; gap: 18px; }
