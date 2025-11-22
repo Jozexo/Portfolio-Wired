@@ -8,7 +8,7 @@ export default defineConfig({
   // Base path for GitHub Pages (repo name)
   base: '/portfolio-wired/',
   // Public site URL (used by some integrations and canonical links)
-  site: 'https://jozexo.github.io',
+  site: 'https://wired.github.io/portfolio-wired',
   vite: {
     plugins: [tailwindcss()]
   }
