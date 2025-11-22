@@ -6,9 +6,9 @@ import tailwindcss from '@tailwindcss/vite';
 // https://astro.build/config
 export default defineConfig({
   // Base path for GitHub Pages (repo name)
-  base: '/portfolio-wired/',
+  base: '/Portfolio-Wired',
   // Public site URL (used by some integrations and canonical links)
-  site: 'https://jozexo.github.io/portfolio-wired',
+  site: 'https://Jozexo.github.io',
   vite: {
     plugins: [tailwindcss()]
   }
