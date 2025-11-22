@@ -44,41 +44,131 @@ import "../styles/components/hero.css";
   </div>
 </section>
 
-<script type="module" src="/src/scripts/term-badge.ts"></script>
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const root = document.getElementById('identity');
-    if (!root) return;
-    const items = root.querySelectorAll('.reveal-hero');
-    const nameEl = root.querySelector('.hero-name');
+// Tiny typing effect for elements marked with [data-term-typing]
+// Works with multiple instances per page and respects reduced motion.
 
-    const prefersReduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const DEFAULT_COMMANDS = [
+  'whoami',
+  'uname -sr',
+  'echo "wired"',
+  'sudo apt install curiosity',
+  'ls -la ~/projects'
+];
+
+function parseCommandsAttr(attr: string | null): string[] {
+  if (!attr) return DEFAULT_COMMANDS;
+  try {
+    const parsed = JSON.parse(attr);
+    if (Array.isArray(parsed)) return parsed.map(String);
+  } catch {}
+  return attr.split(',').map((s: string) => s.trim()).filter(Boolean);
+}
+
+function initOne(root: Element) {
+  // Avoid double init
+  if ((root as any).__termInit) return;
+  (root as any).__termInit = true;
+
+  const cmdEl = root.querySelector<HTMLElement>('.term-cmd');
+  if (!cmdEl) return;
+  const cmd = cmdEl as HTMLElement;
+
+  const prefersReduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const cmds = parseCommandsAttr(root.getAttribute('data-commands'));
+
+  let cmdIdx: number = 0;
+  let charIdx: number = 0;
+  let typing: boolean = true;
+  let timer: number | undefined = undefined;
+
+  const typeSpeed = 95;
+  const eraseSpeed = 55;
+  const holdTime = 1400;
+  const idleTime = 800;
+
+  function tick() {
+    const text = `$ ${cmds[cmdIdx]}`;
+
     if (prefersReduced) {
-      items.forEach(i => i.classList.add('is-visible'));
+      cmd.textContent = text;
       return;
     }
 
-    const io = new IntersectionObserver((entries, obs) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          e.target.classList.add('is-visible');
-          obs.unobserve(e.target);
-        }
-      });
-    }, { threshold: 0.2 });
+    if (typing) {
+      cmd.textContent = text.slice(0, charIdx++);
+      if (charIdx > text.length) {
+        typing = false;
+        timer = window.setTimeout(() => requestAnimationFrame(tick), holdTime);
+        return;
+      }
+      window.setTimeout(() => requestAnimationFrame(tick), typeSpeed);
+    } else {
+      cmd.textContent = text.slice(0, charIdx--);
+      if (charIdx < 2) {
+        typing = true;
+        cmdIdx = (cmdIdx + 1) % cmds.length;
+        timer = window.setTimeout(() => requestAnimationFrame(tick), idleTime);
+        return;
+      }
+      window.setTimeout(() => requestAnimationFrame(tick), eraseSpeed);
+    }
+  }
 
-    items.forEach(el => io.observe(el));
-
-    // Trigger a short glitch burst once when the title first becomes visible
-    const nameObserver = new IntersectionObserver((entries, obs) => {
-      entries.forEach(e => {
-        if (e.isIntersecting && nameEl) {
-          nameEl.classList.add('glitch-lain');
-          setTimeout(() => nameEl.classList.remove('glitch-lain'), 1200);
-          obs.disconnect();
-        }
-      });
-    }, { threshold: 0.6 });
-    if (nameEl) nameObserver.observe(nameEl);
+  tick();
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      if (timer !== undefined) window.clearTimeout(timer);
+    } else {
+      requestAnimationFrame(tick);
+    }
   });
-  </script>
+}
+
+function initAll() {
+  document.querySelectorAll('[data-term-typing]').forEach(initOne);
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initAll);
+} else {
+  initAll();
+}
+
+// Animación reveal y glitch
+document.addEventListener('DOMContentLoaded', () => {
+  const root = document.getElementById('identity');
+  if (!root) return;
+  const items = root.querySelectorAll('.reveal-hero');
+  const nameEl = root.querySelector('.hero-name');
+
+  const prefersReduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (prefersReduced) {
+    items.forEach(i => i.classList.add('is-visible'));
+    return;
+  }
+
+  const io = new IntersectionObserver((entries, obs) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('is-visible');
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.2 });
+
+  items.forEach(el => io.observe(el));
+
+  // Trigger a short glitch burst once when the title first becomes visible
+  const nameObserver = new IntersectionObserver((entries, obs) => {
+    entries.forEach(e => {
+      if (e.isIntersecting && nameEl) {
+        nameEl.classList.add('glitch-lain');
+        setTimeout(() => nameEl.classList.remove('glitch-lain'), 1200);
+        obs.disconnect();
+      }
+    });
+  }, { threshold: 0.6 });
+  if (nameEl) nameObserver.observe(nameEl);
+});
+</script>
